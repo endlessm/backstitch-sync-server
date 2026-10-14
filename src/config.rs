@@ -33,6 +33,12 @@ pub struct CommandConfig {
         default_value = "3000"
     )]
     pub port: u16,
+    #[arg(
+        long,
+        help = "How long (in ms) to wait for a client connection to succeed, before giving up and banning the IP.",
+        default_value = "10000"
+    )]
+    pub connection_timeout: u64,
     #[arg(long, help = "The webviewer URL to recommend, if any.")]
     pub webviewer: Option<String>,
     #[arg(
