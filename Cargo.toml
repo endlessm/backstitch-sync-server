@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 automerge = "0.12.0"
-samod = { version = "0.15.0", features = ["tokio", "threadpool", "axum"] }
+samod = { version = "0.15.0", features = ["tokio", "threadpool", "axum"], git = "https://github.com/endlessm/samod", branch = "endless" }
 futures = "0.3.34"
 tokio = { version = "1.53.3", features = ["full"] }
 tracing-subscriber = { version = "0.3.19", features = ["env-filter", "json"] }
