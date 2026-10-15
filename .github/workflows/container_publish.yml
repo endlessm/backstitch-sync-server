@@ -28,7 +28,7 @@ concurrency:
 
 jobs:
   build:
-    if: ${{ github.repository == 'inkandswitch/backstitch-sync-server' }}
+    if: ${{ github.repository == 'inkandswitch/backstitch-sync-server' || github.repository == 'endlessm/backstitch-sync-server' }}
     name: 🔨 Build ${{ matrix.platform }}
     strategy:
       matrix:
@@ -42,7 +42,7 @@ jobs:
 
     runs-on: ${{ matrix.runner }}
     steps:
-      - name: Prepare environment for current platform 
+      - name: Prepare environment for current platform
         # This step sets up the environment for the current platform being built.
         # It replaces the '/' character in the platform name with '-' and sets it as an environment variable.
         # This is useful for naming artifacts and other resources that cannot contain '/'.
@@ -82,14 +82,14 @@ jobs:
 
       - name: Log in to GHCR
         uses: docker/login-action@v4
-        if: github.repository == 'inkandswitch/backstitch-sync-server'
+        if: ${{ github.repository == 'inkandswitch/backstitch-sync-server' || github.repository == 'endlessm/backstitch-sync-server' }}
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push by digest
-        if: github.repository == 'inkandswitch/backstitch-sync-server'
+        if: ${{ github.repository == 'inkandswitch/backstitch-sync-server' || github.repository == 'endlessm/backstitch-sync-server' }}
         # This step builds and pushes the Docker image using Buildx.
         # It uses the docker/build-push-action to build the image with the specified context and platforms.
         # The image is built with the labels and annotations generated in the previous steps.
@@ -123,7 +123,7 @@ jobs:
         # This step uploads the digest file to the GitHub Actions artifact storage.
         # It uses the actions/upload-artifact action to upload the file created in the previous step.
         # The artifact is named digests-${{ env.PLATFORM_PAIR }}, where PLATFORM_PAIR is the platform name with '/' replaced by '-'.
-        # The artifact is retained for 1 day, and if no files are found, it will throw an error.      
+        # The artifact is retained for 1 day, and if no files are found, it will throw an error.
         uses: actions/upload-artifact@v7
         with:
           name: digests-${{ env.PLATFORM_PAIR }}
@@ -132,7 +132,7 @@ jobs:
           retention-days: 1
 
   publish:
-    if: ${{ github.repository == 'inkandswitch/backstitch-sync-server' }}
+    if: ${{ github.repository == 'inkandswitch/backstitch-sync-server' || github.repository == 'endlessm/backstitch-sync-server' }}
     name: 📚 Publish multi-platform image
     # This job merges the Docker manifests for the different platforms built in the previous job.
     runs-on: ubuntu-latest
